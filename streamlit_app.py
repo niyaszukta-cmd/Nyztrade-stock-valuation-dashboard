@@ -605,12 +605,3 @@ st.markdown("---")
 st.markdown("**💡 NYZTrade Stock Valuation Dashboard | Powered by yfinance**")
 ```
 
----
-
-## **📄 File 2: requirements.txt**
-```
-streamlit
-yfinance
-pandas
-numpy
-plotly
