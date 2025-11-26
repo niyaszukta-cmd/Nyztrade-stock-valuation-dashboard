@@ -408,16 +408,16 @@ if 'analyze_ticker' in st.session_state:
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        st.metric("💵 Current Price", f"₹{valuations['price']:.2f}")
+        st.metric("💵 Current Price", f"Rs {valuations['price']:.2f}")
     
     with col2:
         st.metric("📊 PE Ratio", f"{valuations['trailing_pe']:.2f}x" if valuations['trailing_pe'] else "N/A")
     
     with col3:
-        st.metric("💰 EPS (TTM)", f"₹{valuations['trailing_eps']:.2f}" if valuations['trailing_eps'] else "N/A")
+        st.metric("💰 EPS (TTM)", f"Rs {valuations['trailing_eps']:.2f}" if valuations['trailing_eps'] else "N/A")
     
     with col4:
-        st.metric("🏦 Market Cap", f"₹{valuations['market_cap']/10000000:.0f} Cr")
+        st.metric("🏦 Market Cap", f"Rs {valuations['market_cap']/10000000:.0f} Cr")
     
     # Recommendation
     upside_values = []
@@ -528,7 +528,7 @@ if 'analyze_ticker' in st.session_state:
         x=categories,
         y=current,
         marker_color='#3498db',
-        text=[f'₹{p:.2f}' for p in current],
+        text=[f'Rs {p:.2f}' for p in current],
         textposition='outside'
     ))
     
@@ -537,7 +537,7 @@ if 'analyze_ticker' in st.session_state:
         x=categories,
         y=fair,
         marker_color=colors,
-        text=[f'₹{p:.2f}' for p in fair],
+        text=[f'Rs {p:.2f}' for p in fair],
         textposition='outside'
     ))
     
@@ -545,7 +545,7 @@ if 'analyze_ticker' in st.session_state:
         barmode='group',
         height=500,
         xaxis_title="Method",
-        yaxis_title="Price (₹)",
+        yaxis_title="Price (Rs)",
         template='plotly_white'
     )
     
@@ -554,7 +554,7 @@ if 'analyze_ticker' in st.session_state:
     # Metrics Table
     st.subheader("📋 Financial Metrics")
     
-    metrics_df = pd.DataFrame({
+    metrics_data = {
         'Metric': [
             '💵 Current Price',
             '📊 PE Ratio (TTM)',
@@ -567,41 +567,42 @@ if 'analyze_ticker' in st.session_state:
             '🎯 Industry EV/EBITDA',
             '🏦 Market Cap'
         ],
-        'Value': [
-            f"₹{valuations['price']:.2f}",
-            f"{valuations['trailing_pe']:.2f}x" if valuations['trailing_pe'] else 'N/A',
-            f"{valuations['industry_pe']:.2f}x",
-            f"{valuations['forward_pe']:.2f}x" if valuations['forward_pe'] else 'N/A',
-            f"₹{valuations['trailing_eps']:.2f}" if valuations['trailing_eps'] else 'N/A',
-            f"₹{valuations['enterprise_value']/10000000:.2f} Cr",
-            f"₹{valuations['ebitda']/10000000:.2f} Cr" if valuations['ebitda'] else 'N/A',
-            f"{valuations['current_ev_ebitda']:.2f}x" if valuations['current_ev_ebitda'] else 'N/A',
-            f"{valuations['industry_ev_ebitda']:.2f}x",
-            f"₹{valuations['market_cap']/10000000:.2f} Cr"
-        ]
-    })
+        'Value': []
+    }
+    
+    # Build values list
+    metrics_data['Value'].append(f"Rs {valuations['price']:.2f}")
+    metrics_data['Value'].append(f"{valuations['trailing_pe']:.2f}x" if valuations['trailing_pe'] else 'N/A')
+    metrics_data['Value'].append(f"{valuations['industry_pe']:.2f}x")
+    metrics_data['Value'].append(f"{valuations['forward_pe']:.2f}x" if valuations['forward_pe'] else 'N/A')
+    metrics_data['Value'].append(f"Rs {valuations['trailing_eps']:.2f}" if valuations['trailing_eps'] else 'N/A')
+    metrics_data['Value'].append(f"Rs {valuations['enterprise_value']/10000000:.2f} Cr")
+    metrics_data['Value'].append(f"Rs {valuations['ebitda']/10000000:.2f} Cr" if valuations['ebitda'] else 'N/A')
+    metrics_data['Value'].append(f"{valuations['current_ev_ebitda']:.2f}x" if valuations['current_ev_ebitda'] else 'N/A')
+    metrics_data['Value'].append(f"{valuations['industry_ev_ebitda']:.2f}x")
+    metrics_data['Value'].append(f"Rs {valuations['market_cap']/10000000:.2f} Cr")
+    
+    metrics_df = pd.DataFrame(metrics_data)
     
     st.dataframe(metrics_df, use_container_width=True, hide_index=True)
     
     # Disclaimer
     st.markdown("---")
-    st.error("⚠️ **DISCLAIMER:** Educational purposes only. Not financial advice. Do your own research.")
+    st.error("⚠️ DISCLAIMER: Educational purposes only. Not financial advice. Do your own research.")
     
 else:
-    st.info("👈 Select a stock from the sidebar and click **ANALYZE STOCK** to begin!")
+    st.info("👈 Select a stock from the sidebar and click ANALYZE STOCK to begin!")
     
     st.markdown("### 🌟 Features:")
     st.markdown("""
-    - 📊 **500+ NIFTY Stocks** - Complete database
-    - 💰 **PE Valuation** - Industry benchmark comparison
-    - 🏢 **EV/EBITDA Analysis** - Enterprise value based
-    - 📈 **Upside Calculator** - Potential returns
-    - ⭐ **Smart Recommendations** - Buy/Hold/Avoid signals
-    - 🔍 **Advanced Search** - Find stocks instantly
+    - 📊 500+ NIFTY Stocks - Complete database
+    - 💰 PE Valuation - Industry benchmark comparison
+    - 🏢 EV/EBITDA Analysis - Enterprise value based
+    - 📈 Upside Calculator - Potential returns
+    - ⭐ Smart Recommendations - Buy/Hold/Avoid signals
+    - 🔍 Advanced Search - Find stocks instantly
     """)
 
 # Footer
 st.markdown("---")
 st.markdown("**💡 NYZTrade Stock Valuation Dashboard | Powered by yfinance**")
-```
-
